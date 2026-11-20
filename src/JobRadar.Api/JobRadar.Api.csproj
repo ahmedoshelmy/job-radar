@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <Description>Deployable 2 of 2: the modular monolith hosting Catalog, Matching, Tracker and the stats projection.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JobRadar.ServiceDefaults\JobRadar.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\JobRadar.Catalog\JobRadar.Catalog.csproj" />
+    <ProjectReference Include="..\JobRadar.Matching\JobRadar.Matching.csproj" />
+    <ProjectReference Include="..\JobRadar.Tracker\JobRadar.Tracker.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Matching bounded context: the profile, rule-based scoring with reasons, and live match notifications (SignalR).</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JobRadar.Contracts\JobRadar.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="JobRadar.UnitTests" />
+  </ItemGroup>
+</Project>

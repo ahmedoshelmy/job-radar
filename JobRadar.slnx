@@ -5,5 +5,8 @@
     <Project Path="src/JobRadar.Feeds/JobRadar.Feeds.csproj" />
     <Project Path="src/JobRadar.Feeds.Worker/JobRadar.Feeds.Worker.csproj" />
     <Project Path="src/JobRadar.Catalog/JobRadar.Catalog.csproj" />
+    <Project Path="src/JobRadar.Matching/JobRadar.Matching.csproj" />
+    <Project Path="src/JobRadar.Tracker/JobRadar.Tracker.csproj" />
+    <Project Path="src/JobRadar.Api/JobRadar.Api.csproj" />
   </Folder>
 </Solution>
