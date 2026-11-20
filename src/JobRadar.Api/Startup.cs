@@ -17,16 +17,17 @@ internal static class Startup
     /// <summary>Each module migrates its own schema with its own history table; then the demo profile is seeded once.</summary>
     public static async Task MigrateAndSeedAsync(this WebApplication app)
     {
+        var ct = app.Lifetime.ApplicationStopping;
         await using var scope = app.Services.CreateAsyncScope();
         var services = scope.ServiceProvider;
-        await services.GetRequiredService<CatalogDbContext>().Database.MigrateAsync();
-        await services.GetRequiredService<MatchingDbContext>().Database.MigrateAsync();
-        await services.GetRequiredService<TrackerDbContext>().Database.MigrateAsync();
-        await services.GetRequiredService<StatsDbContext>().Database.MigrateAsync();
+        await services.GetRequiredService<CatalogDbContext>().Database.MigrateAsync(ct);
+        await services.GetRequiredService<MatchingDbContext>().Database.MigrateAsync(ct);
+        await services.GetRequiredService<TrackerDbContext>().Database.MigrateAsync(ct);
+        await services.GetRequiredService<StatsDbContext>().Database.MigrateAsync(ct);
 
         var store = services.GetRequiredService<IMatchingStore>();
-        await store.GetProfileAsync(CancellationToken.None);
-        await store.SaveChangesAsync(CancellationToken.None);
+        await store.GetProfileAsync(ct);
+        await store.SaveChangesAsync(ct);
     }
 }
 
