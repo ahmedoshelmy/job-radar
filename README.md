@@ -1,5 +1,12 @@
 # Job Radar
 
+[![CI](https://github.com/ahmedoshelmy/job-radar/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmedoshelmy/job-radar/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![React + TypeScript](https://img.shields.io/badge/React-TypeScript-3178C6?logo=typescript&logoColor=white)](https://react.dev/)
+
+Part of the [systems portfolio](https://github.com/ahmedoshelmy/systems-portfolio).
+
 A self-hosted job radar for engineers. It polls the public job APIs that companies already publish (Greenhouse, Lever, Ashby,
 Workable) and two remote-job feeds (Remotive, Arbeitnow), removes duplicates across them, scores every opening against your
 profile with reasons you can read, and streams good matches to your browser the moment they are scored. Then it tracks your
