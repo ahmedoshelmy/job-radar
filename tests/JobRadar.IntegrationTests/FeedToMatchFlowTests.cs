@@ -99,6 +99,37 @@ public sealed class FeedToMatchFlowTests(JobRadarFixture fixture) : IClassFixtur
         var illegal = await http.PostAsJsonAsync($"/api/applications/{application.Id}/stage", new { stage = "Offer" }, Json);
         illegal.StatusCode.ShouldBe(HttpStatusCode.Conflict);
         (await illegal.Content.ReadAsStringAsync()).ShouldContain("cannot move from Applied to Offer");
+
+        await PractiseAsync(http, application.Id);
+    }
+
+    private sealed record Question(Guid Id, string Prompt, int IntervalDays, DateTimeOffset DueAt);
+
+    /// <summary>Reaching Interview seeds the question bank; a review reschedules the card with SM-2.</summary>
+    private static async Task PractiseAsync(HttpClient http, Guid applicationId)
+    {
+        (await http.PostAsJsonAsync($"/api/applications/{applicationId}/stage", new { stage = "Interview", note = "tech screen" }, Json))
+            .StatusCode.ShouldBe(HttpStatusCode.OK);
+        var added = await http.PostAsJsonAsync($"/api/applications/{applicationId}/questions", new { prompt = "Design a per-host rate limiter" }, Json);
+        added.StatusCode.ShouldBe(HttpStatusCode.Created);
+
+        var bank = (await http.GetFromJsonAsync<Question[]>($"/api/applications/{applicationId}/questions", Json))!;
+        bank.Length.ShouldBe(4, "three starters plus the one added");
+
+        var reviewed = await http.PostAsJsonAsync($"/api/questions/{bank[0].Id}/review", new { grade = 5 }, Json);
+        (await reviewed.Content.ReadFromJsonAsync<Question>(Json))!.IntervalDays.ShouldBe(1);
+        (await http.PostAsJsonAsync($"/api/questions/{bank[0].Id}/review", new { grade = 9 }, Json)).StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+
+        var due = await http.GetFromJsonAsync<JsonElement>("/api/questions/due", Json);
+        due.GetArrayLength().ShouldBe(3);
+
+        var export = await http.GetFromJsonAsync<JsonElement>("/api/matches/export", Json);
+        export.GetProperty("skills").GetArrayLength().ShouldBeGreaterThan(0);
+        export.GetProperty("matches").EnumerateArray().ShouldContain(m => m.GetProperty("stage").GetString() == "Interview");
+
+        var digest = await http.GetFromJsonAsync<JsonElement>("/api/digest?days=7", Json);
+        digest.GetProperty("stageMoves").GetProperty("Interview").GetInt32().ShouldBe(1);
+        digest.GetProperty("questionsDue").GetInt32().ShouldBe(3);
     }
 
     /// <summary>The worker's real code path (FeedRunner + fixtures) publishing to the test RabbitMQ.</summary>

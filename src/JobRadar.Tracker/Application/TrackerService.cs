@@ -29,7 +29,12 @@ public sealed class PostingNotFoundException(Guid postingId) : Exception($"Posti
 
 public sealed class AlreadyTrackedException(Guid postingId) : Exception($"Posting {postingId} is already in the pipeline.");
 
-public sealed class TrackerService(IApplicationRepository applications, IPostingLookup postings, IPublishEndpoint publisher, TimeProvider clock)
+public sealed class TrackerService(
+    IApplicationRepository applications,
+    IPostingLookup postings,
+    InterviewBankService interviewBank,
+    IPublishEndpoint publisher,
+    TimeProvider clock)
 {
     public async Task<JobApplication> StartAsync(Guid postingId, string? note, CancellationToken cancellationToken)
     {
@@ -56,6 +61,11 @@ public sealed class TrackerService(IApplicationRepository applications, IPosting
         }
 
         var change = application.MoveTo(to, clock.GetUtcNow(), note);
+        if (to == ApplicationStage.Interview)
+        {
+            await interviewBank.SeedStartersAsync(application, cancellationToken); // same unit of work: saved together below
+        }
+
         await applications.SaveChangesAsync(cancellationToken);
         await Publish(application, change, cancellationToken);
         return application;

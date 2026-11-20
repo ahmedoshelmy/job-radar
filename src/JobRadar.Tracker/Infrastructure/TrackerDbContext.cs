@@ -13,6 +13,7 @@ public sealed class TrackerDbContext(DbContextOptions<TrackerDbContext> options)
     public const string Schema = "tracker";
 
     public DbSet<JobApplication> Applications => Set<JobApplication>();
+    public DbSet<InterviewQuestion> Questions => Set<InterviewQuestion>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,6 +39,17 @@ public sealed class TrackerDbContext(DbContextOptions<TrackerDbContext> options)
             e.Property(s => s.From).HasConversion<string>().HasMaxLength(12);
             e.Property(s => s.To).HasConversion<string>().HasMaxLength(12);
             e.Property(s => s.Note).HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<InterviewQuestion>(e =>
+        {
+            e.ToTable("interview_questions");
+            e.HasKey(q => q.Id);
+            e.HasIndex(q => q.ApplicationId);
+            e.HasIndex(q => q.DueAt);
+            e.Property(q => q.Prompt).HasMaxLength(500);
+            e.Property(q => q.Notes).HasMaxLength(4000);
+            e.HasOne<JobApplication>().WithMany().HasForeignKey(q => q.ApplicationId).OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
@@ -67,6 +79,25 @@ internal sealed class ApplicationRepository(TrackerDbContext db) : IApplicationR
     public Task SaveChangesAsync(CancellationToken cancellationToken) => db.SaveChangesAsync(cancellationToken);
 }
 
+internal sealed class QuestionRepository(TrackerDbContext db) : IQuestionRepository
+{
+    public Task<InterviewQuestion?> GetAsync(Guid id, CancellationToken cancellationToken) =>
+        db.Questions.FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
+
+    public async Task<IReadOnlyList<InterviewQuestion>> ForApplicationAsync(Guid applicationId, CancellationToken cancellationToken) =>
+        await db.Questions.AsNoTracking().Where(q => q.ApplicationId == applicationId).OrderBy(q => q.CreatedAt).ToListAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<InterviewQuestion>> DueAsync(DateTimeOffset now, int take, CancellationToken cancellationToken) =>
+        await db.Questions.AsNoTracking().Where(q => q.DueAt <= now).OrderBy(q => q.DueAt).Take(Math.Clamp(take, 1, 100)).ToListAsync(cancellationToken);
+
+    public Task<bool> AnyForApplicationAsync(Guid applicationId, CancellationToken cancellationToken) =>
+        db.Questions.AnyAsync(q => q.ApplicationId == applicationId, cancellationToken);
+
+    public void Add(InterviewQuestion question) => db.Questions.Add(question);
+
+    public Task SaveChangesAsync(CancellationToken cancellationToken) => db.SaveChangesAsync(cancellationToken);
+}
+
 public static class TrackerModule
 {
     /// <summary>The host must also register an <see cref="IPostingLookup"/>.</summary>
@@ -75,6 +106,10 @@ public static class TrackerModule
         services.AddDbContext<TrackerDbContext>(o => o.UseNpgsql(connectionString, n => n.MigrationsHistoryTable("__ef_migrations", TrackerDbContext.Schema)));
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<TrackerService>();
+        services.AddScoped<InterviewBankService>();
+        services.AddScoped<IQuestionRepository, QuestionRepository>();
+        services.AddSingleton<IValidator<AddQuestionRequest>, AddQuestionRequestValidator>();
+        services.AddSingleton<IValidator<ReviewRequest>, ReviewRequestValidator>();
         services.AddSingleton<IValidator<StartApplicationRequest>, StartApplicationRequestValidator>();
         services.AddSingleton<IValidator<MoveStageRequest>, MoveStageRequestValidator>();
         return services;

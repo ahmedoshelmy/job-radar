@@ -61,6 +61,8 @@ app.MapPostingEndpoints();
 app.MapProfileEndpoints();
 app.MapTrackerEndpoints();
 app.MapStatsEndpoints();
+app.MapInterviewEndpoints();
+app.MapInsightEndpoints();
 app.MapHub<MatchesHub>(MatchesHub.Path);
 
 await app.RunAsync();

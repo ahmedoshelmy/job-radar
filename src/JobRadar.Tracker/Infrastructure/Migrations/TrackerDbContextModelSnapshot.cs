@@ -23,6 +23,51 @@ namespace JobRadar.Tracker.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("JobRadar.Tracker.Domain.InterviewQuestion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("DueAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("EaseFactor")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("IntervalDays")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("LastReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Prompt")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("Repetitions")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.HasIndex("DueAt");
+
+                    b.ToTable("interview_questions", "tracker");
+                });
+
             modelBuilder.Entity("JobRadar.Tracker.Domain.JobApplication", b =>
                 {
                     b.Property<Guid>("Id")
@@ -95,6 +140,15 @@ namespace JobRadar.Tracker.Infrastructure.Migrations
                     b.HasIndex("ApplicationId");
 
                     b.ToTable("stage_events", "tracker");
+                });
+
+            modelBuilder.Entity("JobRadar.Tracker.Domain.InterviewQuestion", b =>
+                {
+                    b.HasOne("JobRadar.Tracker.Domain.JobApplication", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("JobRadar.Tracker.Domain.StageEvent", b =>
