@@ -78,6 +78,35 @@ export interface Application {
   history: StageEvent[]
 }
 
+export interface Question {
+  id: string
+  applicationId: string
+  prompt: string
+  notes: string | null
+  repetitions: number
+  easeFactor: number
+  intervalDays: number
+  dueAt: string
+  lastReviewedAt: string | null
+}
+
+export interface DueQuestion {
+  question: Question
+  title: string
+  company: string
+}
+
+export interface Digest {
+  from: string
+  to: string
+  newPostings: number
+  newMatches: number
+  topMatches: { title: string; company: string; score: number; url: string }[]
+  stageMoves: Record<string, number>
+  questionsDue: number
+  summary: string
+}
+
 export interface PostingFilter {
   query: string
   remoteOnly: boolean
@@ -124,6 +153,12 @@ export const api = {
   applications: () => call<Application[]>('/api/applications'),
   track: (postingId: string) =>
     call<Application>('/api/applications', { method: 'POST', body: JSON.stringify({ postingId }) }),
+  dueQuestions: () => call<DueQuestion[]>('/api/questions/due?take=20'),
+  addQuestion: (applicationId: string, prompt: string) =>
+    call<Question>(`/api/applications/${applicationId}/questions`, { method: 'POST', body: JSON.stringify({ prompt }) }),
+  review: (questionId: string, grade: number, notes?: string) =>
+    call<Question>(`/api/questions/${questionId}/review`, { method: 'POST', body: JSON.stringify({ grade, notes }) }),
+  digest: (days = 7) => call<Digest>(`/api/digest?days=${days}`),
   move: (id: string, stage: Stage) =>
     call<Application>(`/api/applications/${id}/stage`, { method: 'POST', body: JSON.stringify({ stage }) }),
 }

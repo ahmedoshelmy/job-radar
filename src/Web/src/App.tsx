@@ -3,10 +3,13 @@ import { api, type Application, type Stage } from './lib/api'
 import { useLiveMatches } from './lib/useLiveMatches'
 import { LiveFeed } from './components/LiveFeed'
 import { Pipeline } from './components/Pipeline'
+import { Practice } from './components/Practice'
 import { PostingsTable } from './components/PostingsTable'
 import { ProfileForm } from './components/ProfileForm'
 
-type Tab = 'radar' | 'pipeline' | 'profile'
+type Tab = 'radar' | 'pipeline' | 'practice' | 'profile'
+
+const TAB_LABELS: Record<Tab, string> = { radar: 'Radar', pipeline: 'Pipeline', practice: 'Practice', profile: 'Profile' }
 
 export function App() {
   const [tab, setTab] = useState<Tab>('radar')
@@ -52,9 +55,10 @@ export function App() {
           <span className="dot" aria-hidden /> Job Radar
         </h1>
         <nav aria-label="Sections">
-          {(['radar', 'pipeline', 'profile'] as Tab[]).map((t) => (
+          {(['radar', 'pipeline', 'practice', 'profile'] as Tab[]).map((t) => (
             <button key={t} className={tab === t ? 'tab active' : 'tab'} onClick={() => setTab(t)} aria-current={tab === t}>
-              {t === 'radar' ? 'Radar' : t === 'pipeline' ? `Pipeline (${applications.length})` : 'Profile'}
+              {TAB_LABELS[t]}
+              {t === 'pipeline' && ` (${applications.length})`}
             </button>
           ))}
         </nav>
@@ -76,6 +80,7 @@ export function App() {
           </div>
         )}
         {tab === 'pipeline' && <Pipeline applications={applications} onMove={move} />}
+        {tab === 'practice' && <Practice applications={applications} />}
         {tab === 'profile' && <ProfileForm onSaved={() => setRefreshKey((k) => k + 1)} />}
       </main>
       <footer className="muted small">

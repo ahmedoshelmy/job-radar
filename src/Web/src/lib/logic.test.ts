@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { Application, Stage } from './api'
 import { postingsQuery } from './api'
-import { feedName, parseReason, relativeTime, scoreBand, signed } from './format'
+import { feedName, GRADES, parseReason, relativeTime, scoreBand, signed } from './format'
 import { canDrop, daysInStage, dropTarget, groupByColumn } from './pipeline'
 
 const app = (id: string, stage: Stage, allowedNext: Stage[], updatedAt = '2026-11-20T10:00:00Z'): Application => ({
@@ -66,6 +66,7 @@ describe('formatting', () => {
     expect(relativeTime('2026-11-20T11:15:00Z', now)).toBe('45 min ago')
     expect(relativeTime('2026-11-18T12:00:00Z', now)).toBe('2 d ago')
     expect(feedName('remotive')).toBe('Remotive')
+    expect(GRADES.map((g) => g.value)).toEqual([0, 1, 2, 3, 4, 5])
   })
 
   it('builds the postings query from the filter', () => {

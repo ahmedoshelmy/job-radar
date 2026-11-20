@@ -120,3 +120,12 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 
 .toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 8px 14px; border-radius: 8px; cursor: pointer; max-width: calc(100% - 32px); }
 footer { margin-top: 24px; text-align: center; }
+
+.plain { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.flashcard { display: grid; gap: 10px; }
+.flashcard .prompt { font-size: 1.1rem; font-weight: 600; margin: 0; }
+.flashcard textarea, .add-question input, .add-question select { padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); font: inherit; }
+.flashcard textarea { min-height: 70px; }
+.add-question { margin-top: 16px; }
+.add-question input { flex: 1 1 200px; }
+.add-question select { max-width: 100%; }

@@ -40,7 +40,7 @@ Needs Docker (or Podman with the Docker CLI). Everything runs offline on invente
 
 ```bash
 docker compose up -d --build --wait
-open http://localhost:8090          # UI: live matches, postings, pipeline, profile
+open http://localhost:8090          # UI: live matches, postings, pipeline, practice, profile
 open http://localhost:5090/scalar   # API reference (OpenAPI + Scalar)
 docker compose down -v
 ```
@@ -106,6 +106,11 @@ into cheap `304`s, and each host gets its own rate limiter, retry policy and cir
 | GET / POST | `/api/applications` | The pipeline; POST `{ postingId, note }` starts at Saved |
 | POST | `/api/applications/{id}/stage` | `{ stage, note }`; illegal moves answer `409` problem details |
 | GET | `/api/stats` | Postings per feed (the second subscriber to `JobPostingAdded`) |
+| GET / POST | `/api/applications/{id}/questions` | Interview question bank for an application (seeded with starters at Interview) |
+| GET | `/api/questions/due` | Questions due for practice (SM-2 schedule) |
+| POST | `/api/questions/{id}/review` | `{ grade: 0..5, notes }` reschedules the card |
+| GET | `/api/matches/export` | JSON Resume-flavoured export (`basics`, `skills`) plus matches and their pipeline stage, for other tools |
+| GET | `/api/digest?days=7` | Weekly digest: new postings, matches, pipeline moves, questions due |
 | WS | `/hubs/matches` | SignalR; server pushes `match` (the `JobMatched` event) |
 | GET | `/health/live`, `/health/ready` | Liveness (process) and readiness (Postgres, broker) on both deployables |
 
@@ -132,11 +137,14 @@ into cheap `304`s, and each host gets its own rate limiter, retry policy and cir
    Matching's own snapshot of each posting.
 7. **Domain-enforced state machine.** The Tracker's `JobApplication` aggregate refuses illegal moves (Saved → Offer), records
    every step as a `StageEvent`, and publishes `ApplicationStageChanged`. The API maps refusals to RFC 7807 problem details.
-8. **One switch for the broker.** `Messaging:Transport=RabbitMq|AzureServiceBus`; consumers and endpoint names are identical,
+8. **Practice that sticks.** Reaching Interview seeds a question bank for that application; each card is scheduled with
+   SM-2 (1 day, 6 days, then interval × ease), so the UI's Practice tab shows only what is due.
+9. **One switch for the broker.** `Messaging:Transport=RabbitMq|AzureServiceBus`; consumers and endpoint names are identical,
    only the host line changes. Bicep in `infra/` targets Azure Container Apps + Postgres Flexible Server + Service Bus.
-9. **Tests that prove the flow.** Parser tests per board on invented fixtures in each board's real response shape, and one
+10. **Tests that prove the flow.** Parser tests per board on invented fixtures in each board's real response shape, and one
    Testcontainers test (real Postgres and RabbitMQ) that runs the worker's feed runner, waits for 17 deduplicated postings, receives
-   the match over SignalR and drives an application through the pipeline, including a rejected illegal move.
+   the match over SignalR, drives an application through the pipeline (including a rejected illegal move), practises a
+   question and reads the export and the digest.
 
 ## Project layout
 

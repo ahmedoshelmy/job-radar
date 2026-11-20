@@ -39,3 +39,13 @@ const FEED_NAMES: Record<string, string> = {
 export function feedName(kind: string): string {
   return FEED_NAMES[kind] ?? kind
 }
+
+/** SM-2 grades with the wording shown on the practice buttons. */
+export const GRADES: { value: number; label: string; hint: string }[] = [
+  { value: 0, label: 'Blank', hint: 'Could not answer at all' },
+  { value: 1, label: 'Wrong', hint: 'Answered, but wrong' },
+  { value: 2, label: 'Almost', hint: 'Wrong, but the right answer felt familiar' },
+  { value: 3, label: 'Hard', hint: 'Right, with serious effort' },
+  { value: 4, label: 'Good', hint: 'Right, after some thought' },
+  { value: 5, label: 'Easy', hint: 'Right, instantly' },
+]
