@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { api, type Posting, type PostingFilter } from '../lib/api'
+import { api, type MatchExplanation, type Posting, type PostingFilter } from '../lib/api'
 import { feedName, scoreBand, signed } from '../lib/format'
 
 interface Props {
@@ -131,6 +131,7 @@ function PostingRow({ posting: p, expanded, tracked, onToggle, onTrack }: RowPro
       {expanded && (
         <tr className="why">
           <td colSpan={5}>
+            <AiSummary postingId={p.id} />
             <ul className="reasons">
               {p.reasons.map((r) => (
                 <li key={r.code + r.text} className={r.points > 0 ? 'plus' : r.points < 0 ? 'minus' : 'zero'}>
@@ -142,5 +143,30 @@ function PostingRow({ posting: p, expanded, tracked, onToggle, onTrack }: RowPro
         </tr>
       )}
     </>
+  )
+}
+
+/** The optional free-AI paragraph; renders nothing while loading, when AI is off (the default) or when it fails. */
+function AiSummary({ postingId }: { postingId: string }) {
+  const [explanation, setExplanation] = useState<MatchExplanation | null>(null)
+
+  useEffect(() => {
+    let current = true
+    api
+      .explanation(postingId)
+      .then((e) => current && setExplanation(e))
+      .catch(() => current && setExplanation(null))
+    return () => {
+      current = false
+    }
+  }, [postingId])
+
+  if (!explanation?.aiEnabled || !explanation.summary) return null
+  return (
+    <p className="ai-summary">
+      <span className="muted small">AI summary · the score above comes from the rules</span>
+      <br />
+      {explanation.summary}
+    </p>
   )
 }

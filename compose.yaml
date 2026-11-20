@@ -58,6 +58,11 @@ services:
       Messaging__Transport: RabbitMq
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
       OTEL_SERVICE_NAME: job-radar-api
+      # Optional free-AI match explanations, off unless AI_PROVIDER is set (see README)
+      Ai__Provider: ${AI_PROVIDER:-None}
+      Ai__Model: ${AI_MODEL:-}
+      Ai__ApiKey: ${AI_API_KEY:-}
+      Ai__BaseUrl: ${AI_BASE_URL:-}
     ports:
       - "${API_PORT:-5090}:8080"
     depends_on:

@@ -84,6 +84,7 @@ button.score { cursor: pointer; }
 .reasons .plus { background: var(--good-soft); color: var(--good); }
 .reasons .minus { background: var(--bad-soft); color: var(--bad); }
 .reasons .zero { background: var(--bg); color: var(--muted); }
+.ai-summary { margin: 6px 0; max-width: 70ch; font-size: 0.9rem; }
 
 .filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 12px; }
 .filters input[type='search'] { flex: 1 1 220px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); }

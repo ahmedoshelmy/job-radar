@@ -30,6 +30,11 @@ public static class PostingEndpoints
     public static IEndpointRouteBuilder MapPostingEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapGet("/api/postings", SearchAsync).WithTags("Postings");
+        app.MapGet("/api/postings/{id:guid}/explanation", async (Guid id, ExplainMatch explain, CancellationToken ct) =>
+            await explain.HandleAsync(id, ct) is { } explanation
+                ? Results.Ok(explanation)
+                : Results.Problem("No score for this posting yet.", statusCode: StatusCodes.Status404NotFound))
+            .WithTags("Postings");
         app.MapGet("/api/matches", async (IMatchQueries matches, int? take, CancellationToken ct) =>
             await matches.RecentMatchesAsync(take ?? 50, ct)).WithTags("Postings");
         return app;

@@ -68,6 +68,11 @@ public sealed class FeedToMatchFlowTests(JobRadarFixture fixture) : IClassFixtur
         filtered!.ShouldNotBeEmpty();
         filtered!.ShouldAllBe(p => p.Score >= 60);
 
+        var explanation = await http.GetFromJsonAsync<JsonElement>($"/api/postings/{filtered![0].Id}/explanation", Json);
+        explanation.GetProperty("aiEnabled").GetBoolean().ShouldBeFalse("AI explanations are off by default");
+        explanation.GetProperty("reasons").GetArrayLength().ShouldBeGreaterThan(0);
+        (await http.GetAsync(new Uri($"/api/postings/{Guid.NewGuid()}/explanation", UriKind.Relative))).StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
         await TrackAsync(http, postings!.Single(p => p.Company == "Nilewave Labs" && p.Title.Contains(".NET", StringComparison.Ordinal)).Id);
 
         var stats = await EventuallyAsync(() => http.GetFromJsonAsync<JsonElement>("/api/stats", Json), s => s.GetProperty("totalPostings").GetInt32() == UniqueOpenings);

@@ -27,6 +27,7 @@ builder.Services.AddOpenApi();
 // Three bounded contexts, one deployable, one database, three schemas (plus the stats projection).
 builder.Services.AddCatalogModule(connectionString);
 builder.Services.AddMatchingModule(connectionString);
+builder.Services.AddMatchExplanations(builder.Configuration);
 builder.Services.AddTrackerModule(connectionString);
 builder.Services.AddScoped<IPostingLookup, CatalogPostingLookup>();
 builder.Services.AddDbContext<StatsDbContext>(o => o.UseNpgsql(connectionString, n => n.MigrationsHistoryTable("__ef_migrations", StatsDbContext.Schema)));

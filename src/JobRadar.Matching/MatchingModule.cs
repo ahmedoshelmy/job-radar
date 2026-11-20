@@ -4,7 +4,9 @@ using JobRadar.Matching.Domain;
 using JobRadar.Matching.Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace JobRadar.Matching;
 
@@ -19,6 +21,31 @@ public static class MatchingModule
         services.AddSingleton<IValidator<ProfileDraft>, ProfileDraftValidator>();
         services.AddSingleton<IMatchNotifier, SignalRMatchNotifier>();
         services.AddSignalR();
+        return services;
+    }
+
+    /// <summary>Optional free-AI "why this matches" (<c>Ai:Provider</c> = None | OpenRouter | Ollama; None by default).</summary>
+    public static IServiceCollection AddMatchExplanations(this IServiceCollection services, IConfiguration configuration)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        var section = configuration.GetSection(AiOptions.Section);
+        services.AddOptions<AiOptions>()
+            .Bind(section)
+            .Validate(AiOptions.IsValid, "Ai: OpenRouter needs Ai__ApiKey and a ':free' model id; Ollama needs Ai__Model; Ai__BaseUrl must be an absolute URL.")
+            .ValidateOnStart();
+        services.AddMemoryCache();
+        services.AddScoped<ExplainMatch>();
+
+        if (section.GetValue(nameof(AiOptions.Provider), AiProvider.None) == AiProvider.None)
+        {
+            services.AddSingleton<IMatchExplainer, DisabledMatchExplainer>();
+        }
+        else
+        {
+            services.AddHttpClient<IMatchExplainer, ChatCompletionsMatchExplainer>((sp, http) =>
+                http.Timeout = TimeSpan.FromSeconds(sp.GetRequiredService<IOptions<AiOptions>>().Value.TimeoutSeconds));
+        }
+
         return services;
     }
 

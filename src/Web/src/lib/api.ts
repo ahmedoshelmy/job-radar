@@ -107,6 +107,14 @@ export interface Digest {
   summary: string
 }
 
+export interface MatchExplanation {
+  postingId: string
+  score: number
+  reasons: MatchReason[]
+  aiEnabled: boolean
+  summary: string | null
+}
+
 export interface PostingFilter {
   query: string
   remoteOnly: boolean
@@ -146,6 +154,7 @@ export function postingsQuery(filter: PostingFilter): string {
 
 export const api = {
   postings: (filter: PostingFilter) => call<Posting[]>(postingsQuery(filter)),
+  explanation: (postingId: string) => call<MatchExplanation>(`/api/postings/${postingId}/explanation`),
   recentMatches: () => call<RecentMatch[]>('/api/matches?take=30'),
   profile: () => call<{ profile: Profile; updatedAt: string }>('/api/profile'),
   saveProfile: (profile: Profile) =>
