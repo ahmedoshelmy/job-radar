@@ -32,10 +32,14 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    volumes:
+      - rabbitdata:/var/lib/rabbitmq
     ports:
       - "${RABBITMQ_UI_PORT:-15673}:15672"
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      # Not rabbitmq-diagnostics: run as root before the broker starts, it writes a root-owned .erlang.cookie and the broker
+      # then dies with eacces. The management UI answering means the broker is up.
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:15672/"]
       interval: 5s
       timeout: 10s
       retries: 30
@@ -120,4 +124,5 @@ services:
 
 volumes:
   pgdata:
+  rabbitdata:
   feedstate:
