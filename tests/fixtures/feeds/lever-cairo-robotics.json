@@ -1,0 +1,32 @@
+[
+  {
+    "id": "c0ffee01-beef-4ace-9bad-cafef00dbe01",
+    "text": "Robotics Software Engineer, C++",
+    "hostedUrl": "https://jobs.lever.co/cairo-robotics/c0ffee01-beef-4ace-9bad-cafef00dbe01",
+    "applyUrl": "https://jobs.lever.co/cairo-robotics/c0ffee01-beef-4ace-9bad-cafef00dbe01/apply",
+    "categories": { "location": "Cairo, Egypt", "allLocations": ["Cairo, Egypt"], "team": "Autonomy", "commitment": "Full-time" },
+    "workplaceType": "hybrid",
+    "createdAt": 1763370000000,
+    "descriptionPlain": "Motion planning in modern C++ and ROS 2. Python for tooling.",
+    "salaryRange": { "min": 30000, "max": 42000, "currency": "USD", "interval": "per-year-salary" }
+  },
+  {
+    "id": "c0ffee02-beef-4ace-9bad-cafef00dbe02",
+    "text": "Backend Developer (Go)",
+    "hostedUrl": "https://jobs.lever.co/cairo-robotics/c0ffee02-beef-4ace-9bad-cafef00dbe02",
+    "categories": { "location": "Remote - EMEA", "allLocations": ["Remote - EMEA"], "team": "Cloud" },
+    "workplaceType": "remote",
+    "createdAt": 1763283600000,
+    "descriptionPlain": "Fleet telemetry services in Go with PostgreSQL and Docker."
+  },
+  {
+    "id": "c0ffee03-beef-4ace-9bad-cafef00dbe03",
+    "text": "Mid .NET Developer",
+    "hostedUrl": "https://jobs.lever.co/cairo-robotics/c0ffee03-beef-4ace-9bad-cafef00dbe03",
+    "categories": { "location": "Berlin, Germany", "allLocations": ["Berlin, Germany"], "team": "Cloud" },
+    "workplaceType": "onsite",
+    "createdAt": 1763197200000,
+    "descriptionPlain": "C#, ASP.NET Core and SQL Server for the fleet portal.",
+    "salaryRange": { "min": 60000, "max": 70000, "currency": "EUR", "interval": "per-year-salary" }
+  }
+]

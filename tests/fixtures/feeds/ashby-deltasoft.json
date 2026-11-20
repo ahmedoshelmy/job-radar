@@ -1,0 +1,49 @@
+{
+  "jobs": [
+    {
+      "id": "d1ce000a-feed-4ace-9bad-cafedeadbe0a",
+      "title": "Platform Engineer",
+      "jobUrl": "https://jobs.ashbyhq.com/deltasoft/d1ce000a-feed-4ace-9bad-cafedeadbe0a",
+      "location": "Remote",
+      "workplaceType": "Remote",
+      "isRemote": true,
+      "isListed": true,
+      "address": { "postalAddress": { "addressCountry": "Germany" } },
+      "secondaryLocations": [ { "location": "EMEA" } ],
+      "publishedAt": "2026-11-18T08:00:00.000+00:00",
+      "descriptionPlain": "Own our Azure landing zone: Bicep, GitHub Actions, Docker and .NET services.",
+      "department": "Infrastructure",
+      "employmentType": "FullTime",
+      "compensation": { "compensationTierSummary": "USD 70K – 90K" }
+    },
+    {
+      "id": "d1ce000b-feed-4ace-9bad-cafedeadbe0b",
+      "title": "Junior QA Engineer",
+      "jobUrl": "https://jobs.ashbyhq.com/deltasoft/d1ce000b-feed-4ace-9bad-cafedeadbe0b",
+      "location": "Cairo",
+      "workplaceType": "OnSite",
+      "isListed": true,
+      "address": { "postalAddress": { "addressLocality": "Cairo", "addressCountry": "Egypt" } },
+      "publishedAt": "2026-11-17T08:00:00.000+00:00",
+      "descriptionHtml": "<p>Manual and Playwright testing.</p>"
+    },
+    {
+      "id": "d1ce000c-feed-4ace-9bad-cafedeadbe0c",
+      "title": "Unlisted role is skipped",
+      "jobUrl": "https://jobs.ashbyhq.com/deltasoft/d1ce000c-feed-4ace-9bad-cafedeadbe0c",
+      "isListed": false
+    },
+    {
+      "id": "d1ce000d-feed-4ace-9bad-cafedeadbe0d",
+      "title": "Software Engineer II, Payments",
+      "jobUrl": "https://jobs.ashbyhq.com/deltasoft/d1ce000d-feed-4ace-9bad-cafedeadbe0d",
+      "location": "Remote",
+      "workplaceType": "Remote",
+      "isListed": true,
+      "address": { "postalAddress": { "addressCountry": "Egypt" } },
+      "publishedAt": "2026-11-16T08:00:00.000+00:00",
+      "descriptionPlain": "C# services on Azure Service Bus and PostgreSQL. 2-4 years of experience.",
+      "department": "Engineering"
+    }
+  ]
+}

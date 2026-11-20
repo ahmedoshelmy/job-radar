@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Board adapters (Greenhouse, Lever, Ashby, Workable, Remotive, Arbeitnow), polite HTTP and the feed scheduler.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JobRadar.Contracts\JobRadar.Contracts.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="JobRadar.UnitTests" />
+  </ItemGroup>
+</Project>

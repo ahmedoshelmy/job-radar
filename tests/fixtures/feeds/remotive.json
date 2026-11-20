@@ -1,0 +1,52 @@
+{
+  "job-count": 4,
+  "jobs": [
+    {
+      "id": 2900001,
+      "url": "https://remotive.com/remote-jobs/software-dev/sr-back-end-engineer-net-2900001",
+      "title": "Sr. Back-end Engineer (.NET) - Remote",
+      "company_name": "Nilewave Labs Inc.",
+      "category": "Software Development",
+      "tags": ["c#", "asp.net", "postgresql"],
+      "job_type": "full_time",
+      "publication_date": "2026-11-18T12:00:00",
+      "candidate_required_location": "EMEA",
+      "salary": "$55k - $75k",
+      "description": "<p>Payment APIs in C# on Azure. Mirrored from the company board.</p>"
+    },
+    {
+      "id": 2900002,
+      "url": "https://jobs.lever.co/cairo-robotics/c0ffee01-beef-4ace-9bad-cafef00dbe01?utm_source=remotive&utm_medium=feed",
+      "title": "C++ Robotics Engineer",
+      "company_name": "Cairo Robotics",
+      "category": "Software Development",
+      "tags": ["c++", "ros"],
+      "publication_date": "2026-11-18T13:00:00",
+      "candidate_required_location": "Egypt",
+      "description": "<p>Same opening as the company board, different title and a tracking link.</p>"
+    },
+    {
+      "id": 2900003,
+      "url": "https://remotive.com/remote-jobs/software-dev/dotnet-cloud-engineer-2900003",
+      "title": ".NET Cloud Engineer",
+      "company_name": "Lotus Cloudworks",
+      "category": "Software Development",
+      "tags": ["azure", ".net", "docker", "rabbitmq"],
+      "publication_date": "2026-11-19T07:00:00",
+      "candidate_required_location": "Worldwide",
+      "salary": "",
+      "description": "<p>Event-driven .NET services with RabbitMQ and Docker on Azure.</p>"
+    },
+    {
+      "id": 2900004,
+      "url": "https://remotive.com/remote-jobs/software-dev/python-developer-2900004",
+      "title": "Python Developer",
+      "company_name": "Sphinx Analytics",
+      "category": "Software Development",
+      "tags": ["python", "django"],
+      "publication_date": "2026-11-17T07:00:00",
+      "candidate_required_location": "USA only",
+      "description": "<p>Django APIs. US work authorization required.</p>"
+    }
+  ]
+}

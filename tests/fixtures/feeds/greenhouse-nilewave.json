@@ -1,0 +1,49 @@
+{
+  "jobs": [
+    {
+      "id": 4100001,
+      "title": "Senior Backend Engineer (.NET)",
+      "absolute_url": "https://job-boards.greenhouse.io/nilewave/jobs/4100001",
+      "company_name": "Nilewave Labs",
+      "location": { "name": "Remote, Egypt; Remote, Germany" },
+      "updated_at": "2026-11-18T10:00:00-05:00",
+      "first_published": "2026-11-17T09:30:00-05:00",
+      "content": "&lt;p&gt;Build the payment APIs behind our river-logistics platform.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;C# and ASP.NET Core&lt;/li&gt;&lt;li&gt;PostgreSQL and RabbitMQ&lt;/li&gt;&lt;li&gt;Azure Container Apps&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;3+ years of backend experience.&lt;/p&gt;",
+      "departments": [ { "name": "Engineering" } ]
+    },
+    {
+      "id": 4100002,
+      "title": "Frontend Engineer, React",
+      "absolute_url": "https://job-boards.greenhouse.io/nilewave/jobs/4100002",
+      "company_name": "Nilewave Labs",
+      "location": { "name": "Cairo, Egypt" },
+      "first_published": "2026-11-16T09:30:00-05:00",
+      "content": "&lt;p&gt;React, TypeScript and design systems.&lt;/p&gt;",
+      "departments": [ { "name": "Engineering" } ]
+    },
+    {
+      "id": 4100003,
+      "title": "Staff Platform Engineer",
+      "absolute_url": "https://job-boards.greenhouse.io/nilewave/jobs/4100003",
+      "company_name": "Nilewave Labs",
+      "location": { "name": "Remote, Worldwide" },
+      "first_published": "2026-11-15T09:30:00-05:00",
+      "content": "&lt;p&gt;Kubernetes, Terraform and Azure. 10+ years in infrastructure.&lt;/p&gt;",
+      "departments": [ { "name": "Platform" } ]
+    },
+    {
+      "id": 4100004,
+      "title": "Data Analyst",
+      "absolute_url": "https://job-boards.greenhouse.io/nilewave/jobs/4100004",
+      "company_name": "Nilewave Labs",
+      "location": { "name": "Alexandria, Egypt" },
+      "first_published": "2026-11-14T09:30:00-05:00",
+      "content": "&lt;p&gt;SQL dashboards for the operations team.&lt;/p&gt;",
+      "departments": [ { "name": "Data" } ]
+    },
+    {
+      "title": "Posting without a link is skipped",
+      "id": 4100005
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <Description>Deployable 1 of 2: polls the configured job feeds and publishes JobPostingDiscovered.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JobRadar.Feeds\JobRadar.Feeds.csproj" />
+    <ProjectReference Include="..\JobRadar.ServiceDefaults\JobRadar.ServiceDefaults.csproj" />
+  </ItemGroup>
+</Project>

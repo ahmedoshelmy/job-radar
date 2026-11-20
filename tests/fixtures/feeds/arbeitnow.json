@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "slug": "platform-engineer-deltasoft-gmbh-301",
+      "company_name": "Deltasoft GmbH",
+      "title": "Platform Engineer (m/w/d)",
+      "description": "<p>Azure, Bicep and Docker. Mirrors the Ashby posting.</p>",
+      "remote": true,
+      "url": "https://www.arbeitnow.com/jobs/companies/deltasoft/platform-engineer-301",
+      "tags": ["DevOps"],
+      "job_types": ["full time"],
+      "location": "Remote",
+      "created_at": 1763460000
+    },
+    {
+      "slug": "senior-csharp-developer-spreewald-302",
+      "company_name": "Spreewald Systems GmbH",
+      "title": "Senior C# Developer (m/w/d)",
+      "description": "<p>C#, .NET and PostgreSQL. 8+ years of professional experience.</p>",
+      "remote": true,
+      "url": "https://www.arbeitnow.com/jobs/companies/spreewald/senior-csharp-developer-302",
+      "tags": ["Software Development"],
+      "job_types": ["full time"],
+      "location": "Germany",
+      "created_at": 1763373600
+    },
+    {
+      "slug": "werkstudent-it-support-303",
+      "company_name": "Havelblick AG",
+      "title": "Werkstudent IT Support",
+      "description": "<p>Office IT support.</p>",
+      "remote": false,
+      "url": "https://www.arbeitnow.com/jobs/companies/havelblick/werkstudent-it-support-303",
+      "tags": [],
+      "job_types": ["working student"],
+      "location": "Potsdam",
+      "created_at": 1763287200
+    }
+  ]
+}

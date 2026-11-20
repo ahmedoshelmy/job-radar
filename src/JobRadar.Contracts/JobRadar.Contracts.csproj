@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Integration events shared by Job Radar deployables. Additive changes only.</Description>
+  </PropertyGroup>
+</Project>

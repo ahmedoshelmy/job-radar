@@ -1,0 +1,40 @@
+{
+  "name": "Pyramid Data",
+  "jobs": [
+    {
+      "title": "Sr. Data Engineer",
+      "shortcode": "PD0001",
+      "url": "https://apply.workable.com/pyramid-data/j/PD0001/",
+      "application_url": "https://apply.workable.com/pyramid-data/j/PD0001/apply",
+      "city": "Giza",
+      "country": "Egypt",
+      "telecommuting": false,
+      "published_on": "2026-11-15",
+      "experience": "Mid-Senior level",
+      "description": "<p>Spark and Python pipelines. Airflow.</p>",
+      "department": "Data"
+    },
+    {
+      "title": "Backend Engineer - Node.js",
+      "shortcode": "PD0002",
+      "url": "https://apply.workable.com/pyramid-data/j/PD0002/",
+      "city": "",
+      "country": "",
+      "telecommuting": true,
+      "published_on": "2026-11-18",
+      "experience": "Associate",
+      "description": "<p>Node.js, TypeScript and PostgreSQL APIs. Docker.</p>",
+      "department": "Engineering"
+    },
+    {
+      "title": "Customer Success Specialist",
+      "shortcode": "PD0003",
+      "url": "https://apply.workable.com/pyramid-data/j/PD0003/",
+      "city": "Cairo",
+      "country": "Egypt",
+      "telecommuting": false,
+      "published_on": "2026-11-12",
+      "description": "<p>Onboard new customers.</p>"
+    }
+  ]
+}
