@@ -1,0 +1,123 @@
+name: job-radar
+
+x-dotnet-health: &dotnet-health
+  # The aspnet image has no curl; bash's /dev/tcp is enough for a readiness probe.
+  test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080 && printf 'GET /health/ready HTTP/1.0\\r\\n\\r\\n' >&3 && grep -q ' 200 ' <&3"]
+  interval: 5s
+  timeout: 3s
+  retries: 30
+  start_period: 10s
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: jobradar
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d jobradar"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    ports:
+      - "${RABBITMQ_UI_PORT:-15673}:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+    deploy:
+      resources:
+        limits:
+          memory: 384m
+
+  api:
+    build:
+      context: .
+      dockerfile: src/JobRadar.Api/Dockerfile
+    environment:
+      ConnectionStrings__jobradar: Host=postgres;Database=jobradar;Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}
+      ConnectionStrings__rabbitmq: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672
+      Messaging__Transport: RabbitMq
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_SERVICE_NAME: job-radar-api
+    ports:
+      - "${API_PORT:-5090}:8080"
+    depends_on:
+      postgres: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+    healthcheck: *dotnet-health
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  worker:
+    build:
+      context: .
+      dockerfile: src/JobRadar.Feeds.Worker/Dockerfile
+    environment:
+      ConnectionStrings__rabbitmq: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672
+      Messaging__Transport: RabbitMq
+      Feeds__Mode: ${FEEDS_MODE:-Fixtures}
+      Feeds__TickSeconds: 15
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_SERVICE_NAME: job-radar-worker
+    volumes:
+      - feedstate:/app/state
+    depends_on:
+      rabbitmq: { condition: service_healthy }
+      # The API declares the queues; starting after it means the first pass is never published into the void.
+      api: { condition: service_healthy }
+    healthcheck: *dotnet-health
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  web:
+    build:
+      context: src/Web
+    ports:
+      - "${WEB_PORT:-8090}:80"
+    depends_on:
+      api: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    deploy:
+      resources:
+        limits:
+          memory: 64m
+
+  aspire-dashboard:
+    profiles: [obs]
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.5
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
+    ports:
+      - "18888:18888"
+      - "18889:18889"
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+volumes:
+  pgdata:
+  feedstate:
