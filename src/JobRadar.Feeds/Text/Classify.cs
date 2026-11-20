@@ -91,7 +91,7 @@ public static partial class Classify
     [GeneratedRegex("director|executive|principal|staff|lead|manager")]
     private static partial Regex HintLead();
 
-    [GeneratedRegex("entry|junior|graduate")]
+    [GeneratedRegex("entry|junior|graduate|associate")]
     private static partial Regex HintJunior();
 
     [GeneratedRegex("mid|intermediate")]

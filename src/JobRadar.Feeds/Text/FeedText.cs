@@ -123,7 +123,7 @@ public static partial class FeedText
     [GeneratedRegex(@"<li[^>]*>", RegexOptions.IgnoreCase)]
     private static partial Regex ListItem();
 
-    [GeneratedRegex(@"</(p|div|h[1-6]|li|ul|ol|tr|section)>", RegexOptions.IgnoreCase)]
+    [GeneratedRegex(@"</(p|div|h[1-6]|ul|ol|tr|section)>", RegexOptions.IgnoreCase)]
     private static partial Regex BlockEnd();
 
     [GeneratedRegex(@"<[^>]+>|</?[a-z][^>]*$", RegexOptions.IgnoreCase)]

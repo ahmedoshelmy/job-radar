@@ -10,6 +10,5 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 </Project>
