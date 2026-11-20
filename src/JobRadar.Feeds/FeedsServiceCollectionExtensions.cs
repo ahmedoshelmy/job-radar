@@ -1,8 +1,8 @@
-using Microsoft.Extensions.Configuration;
 using System.Threading.RateLimiting;
 using JobRadar.Feeds.Content;
 using JobRadar.Feeds.Running;
 using JobRadar.Feeds.Sources;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http.Resilience;
 using Polly;
