@@ -5,6 +5,8 @@ Workable) and two remote-job feeds (Remotive, Arbeitnow), removes duplicates acr
 profile with reasons you can read, and streams good matches to your browser the moment they are scored. Then it tracks your
 applications on a Kanban pipeline with a full history of stage changes.
 
+![Job Radar: live matches with reasons, deduplicated postings with an expanded score breakdown (invented fixture data)](docs/images/job-radar-web.png)
+
 Built with .NET 10, MassTransit (RabbitMQ or Azure Service Bus), EF Core on PostgreSQL, SignalR, OpenTelemetry and React.
 
 ```mermaid
@@ -40,8 +42,8 @@ Needs Docker (or Podman with the Docker CLI). Everything runs offline on invente
 
 ```bash
 docker compose up -d --build --wait
-open http://localhost:8090          # UI: live matches, postings, pipeline, practice, profile
-open http://localhost:5090/scalar   # API reference (OpenAPI + Scalar)
+# UI (live matches, postings, pipeline, practice, profile): http://localhost:8090
+# API reference (OpenAPI + Scalar):                         http://localhost:5090/scalar
 docker compose down -v
 ```
 
@@ -51,6 +53,14 @@ UI and every posting is rescored; newly qualifying ones arrive in the live feed.
 
 Optional observability: `OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889 docker compose --profile obs up -d`, then
 open the Aspire dashboard on http://localhost:18888 for traces across the worker, the broker and the API.
+
+### Optional: free-AI "why this matches"
+
+Off by default; the rule reasons are always the answer and the score never comes from a model. To add a two-sentence
+plain-language summary when you expand a posting's score, set in `.env` either a free OpenRouter model
+(`AI_PROVIDER=OpenRouter`, `AI_MODEL=<id ending in :free>`, `AI_API_KEY=<your key>`; paid model ids fail validation at
+startup) or a local Ollama (`AI_PROVIDER=Ollama`, `AI_MODEL=llama3.2`, `AI_BASE_URL=http://host.docker.internal:11434/v1/`).
+Summaries are cached until the posting is rescored; any provider error just hides the summary.
 
 ### Live feeds
 
@@ -69,12 +79,13 @@ Set `FEEDS_MODE=Live` and list your own boards in `Feeds:Sources` (appsettings o
 The board token is the slug in the company's careers URL (`job-boards.greenhouse.io/<token>`, `jobs.lever.co/<token>`,
 `jobs.ashbyhq.com/<token>`, `apply.workable.com/<token>`).
 
-### Without Docker
+### From source
 
 ```bash
 dotnet build JobRadar.slnx
 dotnet test JobRadar.slnx                 # the integration test needs a Docker-compatible runtime
-cd src/Web && npm ci && npm run dev       # proxies /api and /hubs to localhost:5090
+docker compose up -d --build --wait       # backend on :5090 for the web dev server
+cd src/Web && npm ci && npm run dev       # http://localhost:5173, proxies /api and /hubs to localhost:5090
 ```
 
 ## Feeds and their terms
@@ -104,6 +115,7 @@ into cheap `304`s, and each host gets its own rate limiter, retry policy and cir
 | Method | Path | What |
 |---|---|---|
 | GET | `/api/postings?query=&remote=true&minScore=60` | Deduplicated postings with score and reasons (Catalog + Matching composed) |
+| GET | `/api/postings/{id}/explanation` | Rule reasons plus, when `Ai:Provider` is set, a free-model summary (`aiEnabled`, `summary`) |
 | GET | `/api/matches?take=50` | Recently announced matches |
 | GET / PUT | `/api/profile` | The profile; PUT rescores everything and announces new matches |
 | GET / POST | `/api/applications` | The pipeline; POST `{ postingId, note }` starts at Saved |
@@ -117,7 +129,7 @@ into cheap `304`s, and each host gets its own rate limiter, retry policy and cir
 | WS | `/hubs/matches` | SignalR; server pushes `match` (the `JobMatched` event) |
 | GET | `/health/live`, `/health/ready` | Liveness (process) and readiness (Postgres, broker) on both deployables |
 
-## Design notes (talking points)
+## Interview talking points (design notes)
 
 1. **Modular monolith first** ([ADR 0002](docs/adr/0002-modular-monolith.md)). Three bounded contexts (Catalog, Matching,
    Tracker) live in one deployable, each with its own project, `DbContext`, Postgres schema and migrations. They never share
@@ -148,6 +160,10 @@ into cheap `304`s, and each host gets its own rate limiter, retry policy and cir
    Testcontainers test (real Postgres and RabbitMQ) that runs the worker's feed runner, waits for 17 deduplicated postings, receives
    the match over SignalR, drives an application through the pipeline (including a rejected illegal move), practises a
    question and reads the export and the digest.
+
+11. **AI as an optional garnish, not a dependency.** `IMatchExplainer` is an Application port with a disabled default and one
+   OpenAI-compatible adapter (OpenRouter `:free` or Ollama). Options validate at startup that only free models are configured;
+   failures degrade to "no summary"; nothing about scoring, tests or CI needs a model.
 
 ## Project layout
 
