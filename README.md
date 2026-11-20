@@ -92,6 +92,9 @@ employer's site.
 | [Remotive](https://remotive.com) | `remotive.com/api/remote-jobs` | No key; a few calls a day at most; credit Remotive and link back; do not republish to other job sites | 12 h |
 | [Arbeitnow](https://www.arbeitnow.com) | `www.arbeitnow.com/api/job-board-api` | Public API; link back to each job | 24 h |
 
+The fixtures are invented, but the adapters were also run once against a live response from each public feed
+(Greenhouse, Lever, Ashby, Remotive, Arbeitnow) to confirm the shapes; those responses are not stored in this repository.
+
 Politeness is built in, not configured per call (see [ADR 0003](docs/adr/0003-feed-etiquette-and-resilience.md)):
 intervals under one hour fail validation, conditional requests (`If-None-Match` / `If-Modified-Since`) turn unchanged feeds
 into cheap `304`s, and each host gets its own rate limiter, retry policy and circuit breaker.
