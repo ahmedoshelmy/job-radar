@@ -43,6 +43,20 @@ flowchart LR
   CAT & MAT & TRK & STATS --> PG[(PostgreSQL<br/>schema per module)]
 ```
 
+## Run in Codespaces
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ahmedoshelmy/job-radar)
+
+The repo carries a dev container (`.devcontainer/`: .NET 10, Node 22, Docker-in-Docker), so it opens as-is in GitHub
+Codespaces or VS Code Dev Containers and restores the NuGet and npm packages on create. Then one command:
+
+```bash
+docker compose up -d --build --wait
+```
+
+Open the **Web** port (8090) from the Ports tab; the API reference is on the **API** port (5090) at `/scalar`, and the
+RabbitMQ management UI on 15673.
+
 ## Quickstart
 
 Needs Docker (or Podman with the Docker CLI). Everything runs offline on invented fixture feeds by default.
