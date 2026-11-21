@@ -181,7 +181,6 @@ into cheap `304`s, and each host gets its own rate limiter, retry policy and cir
    Testcontainers test (real Postgres and RabbitMQ) that runs the worker's feed runner, waits for 17 deduplicated postings, receives
    the match over SignalR, drives an application through the pipeline (including a rejected illegal move), practises a
    question and reads the export and the digest.
-
 11. **AI as an optional garnish, not a dependency.** `IMatchExplainer` is an Application port with a disabled default and one
    OpenAI-compatible adapter (OpenRouter `:free` or Ollama). Options validate at startup that only free models are configured;
    failures degrade to "no summary"; nothing about scoring, tests or CI needs a model.
@@ -212,6 +211,23 @@ infra                        Bicep (optional, manual deploy; CI only compiles it
 See [.env.example](.env.example) for compose overrides. All settings bind to options classes validated at startup
 (`Feeds:*`, `Messaging:Transport`, `ConnectionStrings:{jobradar,rabbitmq,servicebus}`, `Cors:Origins`,
 `Database:MigrateOnStartup`). Secrets come from the environment only.
+
+## Status
+
+Working: the whole flow above on fixture feeds or live public boards, with per-board parser tests, an architecture test and
+one Testcontainers test that drives the flow end to end.
+
+Known limits:
+
+- No authentication: a single-user tool for your own machine or network.
+- The Bicep in `infra/` has never been deployed; CI only compiles it.
+- The postings list is an in-memory join of Catalog rows and Matching scores, capped at the newest 300 by default
+  ([ADR 0002](docs/adr/0002-modular-monolith.md)); a read model would replace it for many users.
+- Dedupe can merge two genuinely different roles with the same company, title and place; the original link is kept
+  ([ADR 0004](docs/adr/0004-dedupe-fingerprint.md)).
+- Live mode reacts within a day, not a minute, by design ([ADR 0003](docs/adr/0003-feed-etiquette-and-resilience.md)), and
+  the boards are free public endpoints not meant for heavy traffic.
+- No `scripts/smoke.sh` like the sibling repos: the end-to-end proof is the Testcontainers test.
 
 ## Extracted from Lingo
 
